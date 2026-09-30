@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Step3D — Annotation de la marche</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/inter@5/400.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/inter@5/500.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/inter@5/600.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/inter@5/700.css">
+  <link rel="stylesheet" href="style.css">
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+      }
+    }
+  </script>
+</head>
+<body>
+  <aside id="barre-laterale">
+    <div class="marque">
+      <div class="logo">S</div>
+      <h1>Step3D</h1>
+    </div>
+    <p class="section-titre">Sujets</p>
+    <div id="arbre-sujets"></div>
+    <button id="btn-nouveau-sujet" class="bouton contour large" type="button">+ Nouveau sujet</button>
+
+    <section class="carte params">
+      <h2>Paramètres de l'essai</h2>
+      <div class="ligne-param"><span>Cadence</span><strong id="p-cadence">—</strong></div>
+      <div class="ligne-param"><span>Appui G</span><strong id="p-appui-g">—</strong></div>
+      <div class="ligne-param"><span>Appui D</span><strong id="p-appui-d">—</strong></div>
+    </section>
+  </aside>
+
+  <main id="principal">
+    <header id="entete">
+      <div>
+        <h2 id="titre-essai">Choisissez un essai</h2>
+        <p id="info-essai"></p>
+      </div>
+      <div class="actions">
+        <button id="btn-export" class="bouton contour" type="button" disabled>↓ Export Excel</button>
+        <button id="btn-enregistrer" class="bouton principal" type="button" disabled>Enregistrer</button>
+      </div>
+    </header>
+
+    <div id="vue3d">
+      <canvas id="canvas3d"></canvas>
+      <div id="carte-image">
+        <div>Image <span id="num-image">—</span> / <span id="tot-image">—</span> · <span id="temps-image">—</span></div>
+        <div>Pied gauche : <span id="etat-g">—</span></div>
+        <div>Pied droit : <span id="etat-d">—</span></div>
+      </div>
+      <div id="legende">
+        <span><i class="pt pt-g"></i> Gauche</span>
+        <span><i class="pt pt-d"></i> Droit</span>
+        <span><i class="pt pt-b"></i> Bassin</span>
+      </div>
+      <p id="message-essai" class="message" role="status"></p>
+    </div>
+
+    <div id="lecteur">
+      <div class="boutons-lecture">
+        <button id="btn-debut" type="button" title="Début">⏮</button>
+        <button id="btn-prev" type="button" title="Image précédente (Q)">◀1</button>
+        <button id="btn-lecture" type="button" title="Lecture / pause (Z ou Espace)">▶</button>
+        <button id="btn-next" type="button" title="Image suivante (D)">▶1</button>
+        <button id="btn-fin" type="button" title="Fin">⏭</button>
+      </div>
+      <span id="temps-lecteur">00:00,00</span>
+      <div class="vitesses">
+        <button type="button" data-vitesse="0.25">¼×</button>
+        <button type="button" data-vitesse="0.5">½×</button>
+        <button type="button" data-vitesse="1" class="active">1×</button>
+        <button type="button" data-vitesse="2">2×</button>
+      </div>
+    </div>
+
+    <div id="chronologie">
+      <span class="ligne-label">G</span><div class="ligne" id="ligne-g"></div>
+      <span class="ligne-label">D</span><div class="ligne" id="ligne-d"></div>
+      <div id="tete-lecture" hidden></div>
+    </div>
+  </main>
+
+  <aside id="panneau-droit">
+    <section class="carte">
+      <div class="carte-titre">
+        <h2>Événements</h2>
+        <span id="compte-evenements" class="pastille-nombre">0</span>
+      </div>
+      <div class="grille-boutons">
+        <button class="bouton contour" type="button" data-pied="G" data-type="pose" disabled>▼ Pose G</button>
+        <button class="bouton contour" type="button" data-pied="G" data-type="lever" disabled>▲ Lever G</button>
+        <button class="bouton contour" type="button" data-pied="D" data-type="pose" disabled>▼ Pose D</button>
+        <button class="bouton contour" type="button" data-pied="D" data-type="lever" disabled>▲ Lever D</button>
+      </div>
+      <p id="message-evenements" class="message" role="status"></p>
+      <ul id="liste-evenements"></ul>
+    </section>
+
+    <section class="carte">
+      <h2>Raccourcis</h2>
+      <dl class="raccourcis">
+        <dt><kbd>Z</kbd> <kbd>Espace</kbd></dt><dd>lecture / pause</dd>
+        <dt><kbd>Q</kbd> <kbd>D</kbd></dt><dd>image précédente / suivante</dd>
+        <dt><kbd>S</kbd></dt><dd>pause</dd>
+        <dt><kbd>W</kbd></dt><dd>pose / lever gauche</dd>
+        <dt><kbd>B</kbd></dt><dd>pose / lever droit</dd>
+        <dt><kbd>Ctrl Z</kbd></dt><dd>annuler</dd>
+      </dl>
+    </section>
+  </aside>
+
+  <p id="toast" role="status" hidden></p>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/exceljs@4.4.0/dist/exceljs.min.js"></script>
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+  <script src="lecteur.js"></script>
+  <script src="evenements.js"></script>
+  <script src="export.js"></script>
+  <script type="module" src="scene3d.js"></script>
+</body>
+</html>

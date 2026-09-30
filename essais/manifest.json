@@ -1,0 +1,56 @@
+﻿[
+    {
+        "fichier":  "S01_V1_E1.json",
+        "sujet":  "S01",
+        "visite":  1,
+        "essai":  1,
+        "frequence_hz":  100,
+        "nb_images":  1374,
+        "date_visite":  "2026-06-02"
+    },
+    {
+        "fichier":  "S01_V1_E2.json",
+        "sujet":  "S01",
+        "visite":  1,
+        "essai":  2,
+        "frequence_hz":  100,
+        "nb_images":  1165,
+        "date_visite":  "2026-06-02"
+    },
+    {
+        "fichier":  "S01_V2_E1.json",
+        "sujet":  "S01",
+        "visite":  2,
+        "essai":  1,
+        "frequence_hz":  100,
+        "nb_images":  1365,
+        "date_visite":  "2026-06-16"
+    },
+    {
+        "fichier":  "S02_V1_E1.json",
+        "sujet":  "S02",
+        "visite":  1,
+        "essai":  1,
+        "frequence_hz":  100,
+        "nb_images":  1166,
+        "date_visite":  "2026-06-05"
+    },
+    {
+        "fichier":  "S02_V1_E2.json",
+        "sujet":  "S02",
+        "visite":  1,
+        "essai":  2,
+        "frequence_hz":  100,
+        "nb_images":  1777,
+        "date_visite":  "2026-06-05"
+    },
+    {
+        "fichier":  "S03_V1_E1.json",
+        "sujet":  "S03",
+        "visite":  1,
+        "essai":  1,
+        "frequence_hz":  100,
+        "nb_images":  1083,
+        "date_visite":  "2026-06-09"
+    }
+]
